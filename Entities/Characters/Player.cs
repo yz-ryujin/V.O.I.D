@@ -11,7 +11,7 @@ namespace Void.Entities.Characters
             CurrentHealth = health; // Começa com a vida cheia
             AttackDamage = damage;
             AttackRange = range;
-            PositionX = 2; // Posição inicial do jogador
+            Position = 2; // Posição inicial do jogador
         }
     }
 }
