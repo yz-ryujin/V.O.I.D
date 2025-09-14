@@ -46,8 +46,8 @@ namespace Void.Systems.Combat
                 Console.ReadKey();
             }
 
-            // Futuramente: DisplayBattleResult();
-            Console.WriteLine("A batalha terminou!");
+            // Exibe o resultado da batalha
+            DisplayBattleResult();
         }
 
         // --- MÉTODOS DE RENDERIZAÇÃO ---
@@ -79,6 +79,21 @@ namespace Void.Systems.Combat
             Console.WriteLine($"{_player.Name} | Vida: {_player.CurrentHealth}/{_player.MaxHealth} | Posição: {_player.Position}");
             Console.WriteLine($"{_enemy.Name} | Vida: {_enemy.CurrentHealth}/{_enemy.MaxHealth} | Posição: {_enemy.Position}");
             Console.WriteLine("----------------");
+        }
+
+        private void DisplayBattleResult()
+        {
+            Console.Clear();
+            if (_player.IsAlive)
+            {
+                Console.WriteLine($"******************** \n VITÓRIA! \n ******************** ");
+                Console.WriteLine($"Você derrotou {_enemy.Name}. ");
+            }
+            else
+            {
+                Console.WriteLine($"******************** \n DERROTA! \n ******************** ");
+                Console.WriteLine($"Você foi consumido pelo Vazio. ");
+            }
         }
     }
 }
