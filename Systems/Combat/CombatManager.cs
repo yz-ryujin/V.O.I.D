@@ -93,8 +93,18 @@ namespace Void.Systems.Combat
                         break;
                 case 'W':
                 case'3':
-                Console.WriteLine($"{_player.Name} tenta atacar.");
-                break;
+                    int distanceToEnemy = Math.Abs(_player.Position - _enemy.Position);
+                    if (distanceToEnemy <= _player.AttackRange)
+                    {
+                        Console.WriteLine($"Você ataca ferozmente {_enemy.Name}!");
+                        _enemy.CurrentHealth -= _player.AttackDamage;
+                        Console.WriteLine($"O inimigo sofreu {_player.AttackDamage} de dano.");
+                    }
+                    else
+                    {
+                       Console.WriteLine("Inimigo fora de alcance! Você não pode atacá-lo.");
+                    }
+                        break;
                 default:
                 Console.WriteLine("Ação inválida! Você hesitou e perdeu seu turno.");
                 break;
