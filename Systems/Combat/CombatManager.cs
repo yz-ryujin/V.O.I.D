@@ -38,7 +38,7 @@ namespace Void.Systems.Combat
                 }
                 else
                 {
-                    Console.WriteLine($"\nTurno de {_enemy.Name}! (IA ainda não implementada)");
+                    _enemy.PerformAction(_player);
                 }
 
                 _isPlayerTurn = !_isPlayerTurn; // Alterna o turno

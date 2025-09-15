@@ -1,3 +1,6 @@
+using System.Threading;
+using System;
+
 namespace Void.Entities.Characters
 {
     // Classe Enemy que herda de Entity
@@ -14,6 +17,14 @@ namespace Void.Entities.Characters
             AttackDamage = damage;
             AttackRange = range;
             Position = startPosition; // Posição inicial do inimigo
+        }
+
+        public void PerformAction(Player player)
+        {
+            Console.WriteLine($"\nTurno de {Name}!");
+            Thread.Sleep(1000); // Simula um delay para a ação do inimigo
+
+            Console.WriteLine("> O inimigo observa você, planejando o próximo movimento.");
         }
     }
 }
