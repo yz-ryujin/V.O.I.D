@@ -57,10 +57,12 @@ namespace Void.Systems.Combat
 
         private void HandlePlayerAction()
         {
-            Console.WriteLine("\nEscolha sua ação:");
+            Console.WriteLine("\nAções disponíveis:");
             Console.WriteLine("1. Andar para a Esquera (A)");
             Console.WriteLine("2. Andar para a Direita (D)");
-            Console.WriteLine("3. Atacar (W)");
+            Console.WriteLine("3. Ataque Básico");
+            Console.WriteLine("4. Usar Habilidade");
+            Console.WriteLine("\nEscolha sua ação:");
 
             ConsoleKeyInfo keyInfo = Console.ReadKey();
             Console.WriteLine();
@@ -91,7 +93,6 @@ namespace Void.Systems.Combat
                         Console.WriteLine($"{_player.Name} está no limite do campo e não pode mais avançar.");
                     }
                         break;
-                case 'W':
                 case'3':
                     int distanceToEnemy = Math.Abs(_player.Position - _enemy.Position);
                     if (distanceToEnemy <= _player.AttackRange)
@@ -105,11 +106,51 @@ namespace Void.Systems.Combat
                        Console.WriteLine("Inimigo fora de alcance! Você não pode atacá-lo.");
                     }
                         break;
+                case '4':
+                    HandleSkillUsage();
+                    break;
+
                 default:
                 Console.WriteLine("Ação inválida! Você hesitou e perdeu seu turno.");
                 break;
             }
 
+        }
+
+        private void HandleSkillUsage()
+        {
+            if (!_player.Skills.Any())
+            {
+                Console.WriteLine("> Você não conhece nenhuma habilidade!");
+                HandlePlayerAction();
+                return;
+            }
+
+            Console.WriteLine("\nEscolha uma habilidade para usar:");
+
+            // Mostra uma lista numerada de habilidades
+            for (int i = 0; i < _player.Skills.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {_player.Skills[i].Name} - {_player.Skills[i].Description}");
+            }
+            Console.Write("\nSua escolha: ");
+
+            ConsoleKeyInfo skillKeyInfo = Console.ReadKey();
+            Console.WriteLine();
+
+            // Tenta converter a tecla pressionada para um número
+            if (int.TryParse(skillKeyInfo.KeyChar.ToString(), out int skillIndex) && skillIndex > 0 && skillIndex <= _player.Skills.Count)
+            {
+                // Pega a habilidade escolhida da lista (lembrando que a lista começa em 0)
+                Skill chosenSkill = _player.Skills[skillIndex - 1];
+
+                // Executa a habilidade.
+                chosenSkill.Execute(_player, _enemy);
+            }
+            else
+            {
+                Console.WriteLine("> Escolha inválida. Você se atrapalhou e perdeu o turno.");
+            }
         }
 
         // --- MÉTODOS DE RENDERIZAÇÃO ---

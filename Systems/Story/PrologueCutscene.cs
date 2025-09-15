@@ -1,4 +1,5 @@
 using Void.Entities.Characters;
+using Void.Systems.Combat;
 using System;
 using System.Threading; // Para simular delays
 
@@ -42,6 +43,9 @@ namespace Void.Systems.Story
             Narrate("Gritos. Corpos. E o silêncio de novo. \n", 3000);
 
             var alara = new Player("Alara", 100, 20, 3);
+
+            // Atribuindo habilidade
+            alara.Skills.Add(new FlechaPerfurante());
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Narrate("[Você desbloqueou a lembrança de Alara.]", 2000);
