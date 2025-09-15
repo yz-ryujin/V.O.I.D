@@ -33,7 +33,8 @@ namespace Void.Systems.Combat
                 // Verifica de quem é o turno
                 if (_isPlayerTurn)
                 {
-                    Console.WriteLine("\nSeu turno! (Ações ainda não implementadas)");
+                    // Implementação do mecanismo de ação do jogador
+                    HandlePlayerAction();
                 }
                 else
                 {
@@ -42,12 +43,47 @@ namespace Void.Systems.Combat
 
                 _isPlayerTurn = !_isPlayerTurn; // Alterna o turno
 
-                Console.WriteLine("Pressione qualquer tecla para continuar...");
-                Console.ReadKey();
+                if(_enemy.IsAlive)
+                {
+                    Console.WriteLine("Pressione qualquer tecla para continuar...");
+                    Console.ReadKey();
+                }
+
             }
 
             // Exibe o resultado da batalha
             DisplayBattleResult();
+        }
+
+        private void HandlePlayerAction()
+        {
+            Console.WriteLine("\nEscolha sua ação:");
+            Console.WriteLine("1. Andar para a Esquera (A)");
+            Console.WriteLine("2. Andar para a Direita (D)");
+            Console.WriteLine("3. Atacar (W)");
+
+            ConsoleKeyInfo keyInfo = Console.ReadKey();
+            Console.WriteLine();
+
+            switch (char.ToUpper(keyInfo.KeyChar))
+            {
+                case 'A':
+                case'1':
+                Console.WriteLine($"{_player.Name} anda para a esquerda.");
+                break;
+                case 'D':
+                case'2':
+                Console.WriteLine($"{_player.Name} anda para a direita.");
+                break;
+                case 'W':
+                case'3':
+                Console.WriteLine($"{_player.Name} tenta atacar.");
+                break;
+                default:
+                Console.WriteLine("Ação inválida! Você perde seu turno.");
+                break;
+            }
+
         }
 
         // --- MÉTODOS DE RENDERIZAÇÃO ---
@@ -80,6 +116,8 @@ namespace Void.Systems.Combat
             Console.WriteLine($"{_enemy.Name} | Vida: {_enemy.CurrentHealth}/{_enemy.MaxHealth} | Posição: {_enemy.Position}");
             Console.WriteLine("----------------");
         }
+
+        
 
         private void DisplayBattleResult()
         {
