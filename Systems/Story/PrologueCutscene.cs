@@ -2,6 +2,7 @@ using Void.Entities.Characters;
 using Void.Systems.Combat;
 using System;
 using System.Threading; // Para simular delays
+using Spectre.Console;
 
 namespace Void.Systems.Story
 {
@@ -13,7 +14,7 @@ namespace Void.Systems.Story
         public Player Play()
         {
             Narrate("“Antes do som, houve o silêncio.", 2000);
-            Narrate(" Antes da luz, a ausência. \n”", 2500);
+            Narrate(" Antes da luz, a ausência.”\n", 2500);
 
             
             Narrate("O mundo não terminou com uma explosão, mas com um sussurro.", 2000);
@@ -28,12 +29,13 @@ namespace Void.Systems.Story
 
             // Console.Clear();
 
-            
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Narrate("Terreno reconhecido: Fragmento da Origem \n", 3000);
-            Console.ResetColor();
 
-            Narrate("Você se aproxima de um pedestal. Há algo ali: um arco quebrado e uma marca gravada na pedra.", 2500);
+            var systemPanel = new Panel("[lime]Terreno reconhecido: Fragmento da Origem[/]")
+                .Border(BoxBorder.Rounded);
+            AnsiConsole.Write(systemPanel);
+            Thread.Sleep(3000);
+
+            Narrate("\nVocê se aproxima de um pedestal. Há algo ali: um arco quebrado e uma marca gravada na pedra.", 2500);
 
             Narrate("\"Alara...\"", 3000);
 
@@ -46,17 +48,18 @@ namespace Void.Systems.Story
             // Atribuindo habilidade
             alara.Skills.Add(new FlechaPerfurante());
 
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Narrate("[Você desbloqueou a lembrança de Alara.]", 2000);
-            Narrate("\"Ela luta. Ela lembra. Ela existe em você.\"", 3000);
-            Console.ResetColor();
+            var unlockPanel = new Panel("[white bold]Você desbloqueou a lembrança de Alara[/] [cyan]\n Ela luta. Ela lembra. Ela existe em você.\"[/]")
+                .Border(BoxBorder.Double)
+                .BorderColor(Color.Cyan1);
+            AnsiConsole.Write(unlockPanel);
+            Thread.Sleep(3000);
 
             return alara; // Retorna a personagem desbloqueada
         }
 
         private void Narrate(string text, int delayAfter = 1500)
         {
-            Console.WriteLine(text);
+            AnsiConsole.MarkupLine(text);
             Thread.Sleep(delayAfter);
         }
     }
