@@ -13,21 +13,20 @@ namespace Void.Systems.Story
         public Player Play()
         {
             Narrate("“Antes do som, houve o silêncio.", 2000);
-            Narrate(" Antes da luz, a ausência.”", 2500);
+            Narrate(" Antes da luz, a ausência. \n”", 2500);
 
-            Console.Clear();
-
+            
             Narrate("O mundo não terminou com uma explosão, mas com um sussurro.", 2000);
-            Narrate("Foi como se algo tivesse respirado fundo... e nunca mais expirado.", 3000);
+            Narrate("Foi como se algo tivesse respirado fundo... e nunca mais expirado. \n", 3000);
 
             Narrate("Você não sabe seu nome.", 1500);
             Narrate("Não se lembra de ter nascido.", 1500);
-            Narrate("Mas sabe — de algum jeito — que está desperto agora.", 3000);
+            Narrate("Mas sabe — de algum jeito — que está desperto agora. \n", 3000);
 
             Narrate("Mais à frente, uma luz fraca... cinza.", 2000);
-            Narrate("Você caminha.", 2000);
+            Narrate("Você caminha. \n", 2000);
 
-            Console.Clear();
+            // Console.Clear();
 
             
             Console.ForegroundColor = ConsoleColor.Cyan;

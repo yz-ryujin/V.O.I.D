@@ -2,6 +2,7 @@
 using Void.Entities.Characters;
 using System;
 using System.Threading; // Para simular delays
+using Spectre.Console;
 
 namespace Void.Systems.Combat
 {
@@ -178,13 +179,35 @@ namespace Void.Systems.Combat
 
         private void DisplayHUD()
         {
-            Console.WriteLine("--- STATUS ---");
-            Console.WriteLine($"{_player.Name} | Vida: {_player.CurrentHealth}/{_player.MaxHealth} | Posição: {_player.Position}");
-            Console.WriteLine($"{_enemy.Name} | Vida: {_enemy.CurrentHealth}/{_enemy.MaxHealth} | Posição: {_enemy.Position}");
-            Console.WriteLine("----------------");
+            // Cria uma nova tabela
+            var table = new Table();
+            table.Border(TableBorder.Rounded);
+            table.Title("[yellow]STATUS DA BATALHA[/]");
+
+            // Adiciona as colunas
+            table.AddColumn(new TableColumn("[b]Personagem[/]").Centered());
+            table.AddColumn(new TableColumn("[green]Vida[/]").Centered());
+            table.AddColumn(new TableColumn("[cyan]Posição[/]").Centered());
+
+            // Adiciona uma linha para o Jogador
+            table.AddRow(
+                $"[b]{_player.Name}[/]",
+                $"[green]{_player.CurrentHealth}[/] / {_player.MaxHealth}",
+                $"[cyan]{_player.Position}[/]"
+            );
+
+            // Adiciona uma linha para o Inimigo
+            table.AddRow(
+                $"[b]{_enemy.Name}[/]",
+                $"[red]{_enemy.CurrentHealth}[/] / {_enemy.MaxHealth}",
+                $"[cyan]{_enemy.Position}[/]"
+            );
+
+            // Renderiza a tabela no console
+            AnsiConsole.Write(table);
         }
 
-        
+
 
         private void DisplayBattleResult()
         {
