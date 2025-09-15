@@ -87,7 +87,31 @@ namespace Void.Core
             else
             {
                 Console.WriteLine("\nO Véu te consumiu antes mesmo de sua história começar.");
+                return;
             }
+
+            Console.Clear();
+
+
+            Narrate("Seguindo um rastro de energia distorcida, você encontra outra ilha flutuante", 2000) ;
+            Narrate("Nela, um homem de armadura pesada luta sozinho contra três sombras.", 3000);
+            Narrate("Com sua ajuda, a batalha termina rapidamente", 2000);
+
+            AnsiConsole.MarkupLine("\n [yellow]\" Essa escória não para de surgir. Sou Tarok. Parece que temos um inimigo em comum.\"[/]");
+            Thread.Sleep(3500);
+
+            // Desbloqueio de Tharok
+            var tharok = new Tharok(); // Criar uma instância de Tharok
+            _unlockedCharacters.Add(tharok);
+
+            var unlockPanel = new Panel($"\n [cyan]O poder e a resiliência de Tharok agora são seus.[/]")
+                .Header($"[white bold]Você desbloqueou a lembrança de {tharok.Name}[/]")
+                .Border(BoxBorder.Double)
+                .BorderColor(Color.Cyan1);
+            AnsiConsole.Write(unlockPanel);
+            Thread.Sleep(3000);
+
+
         }
 
         // Método auxiliar que movemos para cá para ser usado pelo GameManager
