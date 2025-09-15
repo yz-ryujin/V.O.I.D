@@ -44,9 +44,7 @@ namespace Void.Core
                 int leftPadding = (consoleWidth - line.Length) / 2;
                 string paddedLine = new string(' ', Math.Max(0, leftPadding)) + line;
                 AnsiConsole.WriteLine(paddedLine);
-            }
-
-            
+            }           
 
 
 
@@ -111,7 +109,44 @@ namespace Void.Core
             AnsiConsole.Write(unlockPanel);
             Thread.Sleep(3000);
 
+            Console.Clear();
 
+            Narrate("Um novo desafio se aproxima nas brumas do Vazio...", 2500);
+
+            Player selectedPlayer = ChooseCharacter();
+
+            AnsiConsole.MarkupLine($"\n[red]Arauto da Loucura[/] detectado!");
+            Thread.Sleep(2000);
+            Enemy secondEnemy = new Enemy("Arauto da Loucura", 60, 15, 2, 8);
+
+            CombatManager combat2 = new CombatManager(selectedPlayer, secondEnemy);
+            combat2.StartBattle();
+
+            if (selectedPlayer.IsAlive)
+            {
+                AnsiConsole.MarkupLine("\nOutra vitória... mas a um custo. O Vazio parece mais denso.");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine($"\nA mente de {selectedPlayer.Name} foi quebrada pela loucura.");
+            }
+
+        }
+
+        private Player ChooseCharacter()
+        {
+            AnsiConsole.WriteLine();
+
+            var prompt = new SelectionPrompt<Player>()
+                .Title("Qual [yellow]campeão[/] enfrentará o Vazio?")
+                .PageSize(5)
+                .MoreChoicesText("[grey](Mova para cima e para baixo para ver mais opções)[/]")
+                .UseConverter(player => $"[bold]{player.Name}[/] [grey](HP: {player.MaxHealth}, Dano: {player.AttackDamage}, Alcance: {player.AttackRange})[/]");
+
+            
+            prompt.AddChoices(_unlockedCharacters);
+                       
+            return AnsiConsole.Prompt(prompt);
         }
 
         // Método auxiliar que movemos para cá para ser usado pelo GameManager
