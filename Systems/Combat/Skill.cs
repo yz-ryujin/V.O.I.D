@@ -7,7 +7,7 @@ namespace Void.Systems.Combat
     public abstract class Skill
     {
         // Propriedades comuns a todas as habilidades
-        public string Name { get; protected set; }; // Nome da habilidade
+        public string Name { get; protected set; } // Nome da habilidade
         public string Description { get; protected set; } // Descrição da habilidade
         public int Damage { get; protected set; } // Dano causado pela habilidade
         // Depois podemos adicionar custo de mana, cooldown, etc.
