@@ -2,6 +2,8 @@
 using Void.Entities.Characters;
 using System;
 using System.Threading; // Para simular delays
+using Spectre.Console;
+using Spectre.Console.Rendering;
 
 namespace Void.Systems.Combat
 {
@@ -178,13 +180,50 @@ namespace Void.Systems.Combat
 
         private void DisplayHUD()
         {
-            Console.WriteLine("--- STATUS ---");
-            Console.WriteLine($"{_player.Name} | Vida: {_player.CurrentHealth}/{_player.MaxHealth} | Posição: {_player.Position}");
-            Console.WriteLine($"{_enemy.Name} | Vida: {_enemy.CurrentHealth}/{_enemy.MaxHealth} | Posição: {_enemy.Position}");
-            Console.WriteLine("----------------");
+            var table = new Table();
+            table.Border(TableBorder.Rounded);
+            table.Title("[yellow]STATUS DA BATALHA[/]");
+
+            // Adicionamos uma largura à coluna da vida para a barra caber confortavelmente
+            table.AddColumn(new TableColumn("[b]Personagem[/]").Centered());
+            table.AddColumn(new TableColumn("[green]Vida[/]").Width(20).Centered()); // <-- LARGURA ADICIONADA
+            table.AddColumn(new TableColumn("[cyan]Posição[/]").Centered());
+
+            // --- Barra de Vida do Jogador ---
+            var playerHealthChart = new BreakdownChart()
+                .Width(18) // Define a largura da barra
+                .AddItem("Vida", _player.CurrentHealth, Color.Green)
+                .AddItem("Dano", _player.MaxHealth - _player.CurrentHealth, Color.Grey15);
+
+            // --- Barra de Vida do Inimigo ---
+            var enemyHealthChart = new BreakdownChart()
+                .Width(18)
+                .AddItem("Vida", _enemy.CurrentHealth, Color.Red)
+                .AddItem("Dano", _enemy.MaxHealth - _enemy.CurrentHealth, Color.Grey15);
+
+            var playerRow = new List<IRenderable>
+            {
+                new Markup($"[b]{_player.Name}[/]"),
+                playerHealthChart,
+                new Markup($"[cyan]{_player.Position}[/]")
+            };
+
+                    var enemyRow = new List<IRenderable>
+            {
+                new Markup($"[b]{_enemy.Name}[/]"),
+                enemyHealthChart,
+                new Markup($"[cyan]{_enemy.Position}[/]")
+            };
+
+            // Agora adicionamos a lista de itens à tabela. Isso é inequívoco para o compilador.
+            table.AddRow(playerRow);
+            table.AddRow(enemyRow);
+            // --- FIM DA CORREÇÃO ---
+
+            AnsiConsole.Write(table);
         }
 
-        
+
 
         private void DisplayBattleResult()
         {
