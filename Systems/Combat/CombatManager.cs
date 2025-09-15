@@ -69,18 +69,34 @@ namespace Void.Systems.Combat
             {
                 case 'A':
                 case'1':
-                Console.WriteLine($"{_player.Name} anda para a esquerda.");
-                break;
+                if(_player.Position > 0)
+                    {
+                        _player.Position--;
+                        Console.WriteLine($"{_player.Name} se move para a esquerda.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{_player.Name} está no limite do campo e não pode mais recuar.");
+                    }
+                        break;
                 case 'D':
                 case'2':
-                Console.WriteLine($"{_player.Name} anda para a direita.");
-                break;
+                if(_player.Position < _terrain.Length - 1)
+                    {
+                        _player.Position++;
+                        Console.WriteLine($"{_player.Name} se move para a direita.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{_player.Name} está no limite do campo e não pode mais avançar.");
+                    }
+                        break;
                 case 'W':
                 case'3':
                 Console.WriteLine($"{_player.Name} tenta atacar.");
                 break;
                 default:
-                Console.WriteLine("Ação inválida! Você perde seu turno.");
+                Console.WriteLine("Ação inválida! Você hesitou e perdeu seu turno.");
                 break;
             }
 
