@@ -9,46 +9,45 @@ namespace Void.Systems.Story
     public class PrologueCutscene
     {
         /// <summary>
-        /// Executa a cutscene do prólogo e retorna o personagem desbloqueado.
+        /// Executa a cutscene do prï¿½logo e retorna o personagem desbloqueado.
         /// </summary>
         public Player Play()
         {
-            Narrate("“Antes do som, houve o silêncio.", 2000);
-            Narrate(" Antes da luz, a ausência.”\n", 2500);
+            Narrate("ï¿½Antes do som, houve o silï¿½ncio.", 2000);
+            Narrate(" Antes da luz, a ausï¿½ncia.ï¿½\n", 2500);
 
             
-            Narrate("O mundo não terminou com uma explosão, mas com um sussurro.", 2000);
+            Narrate("O mundo nï¿½o terminou com uma explosï¿½o, mas com um sussurro.", 2000);
             Narrate("Foi como se algo tivesse respirado fundo... e nunca mais expirado. \n", 3000);
 
-            Narrate("Você não sabe seu nome.", 1500);
-            Narrate("Não se lembra de ter nascido.", 1500);
-            Narrate("Mas sabe — de algum jeito — que está desperto agora. \n", 3000);
+            Narrate("Vocï¿½ nï¿½o sabe seu nome.", 1500);
+            Narrate("Nï¿½o se lembra de ter nascido.", 1500);
+            Narrate("Mas sabe ï¿½ de algum jeito ï¿½ que estï¿½ desperto agora. \n", 3000);
 
-            Narrate("Mais à frente, uma luz fraca... cinza.", 2000);
-            Narrate("Você caminha. \n", 2000);
+            Narrate("Mais ï¿½ frente, uma luz fraca... cinza.", 2000);
+            Narrate("Vocï¿½ caminha. \n", 2000);
 
             // Console.Clear();
-
-
+            
             var systemPanel = new Panel("[lime]Terreno reconhecido: Fragmento da Origem[/]")
                 .Border(BoxBorder.Rounded);
             AnsiConsole.Write(systemPanel);
             Thread.Sleep(3000);
 
-            Narrate("\nVocê se aproxima de um pedestal. Há algo ali: um arco quebrado e uma marca gravada na pedra.", 2500);
+            Narrate("\nVocï¿½ se aproxima de um pedestal. Hï¿½ algo ali: um arco quebrado e uma marca gravada na pedra.", 2500);
 
             Narrate("\"Alara...\"", 3000);
 
-            Narrate("Ao tocar o arco, imagens invadem sua cabeça.", 2000);
+            Narrate("Ao tocar o arco, imagens invadem sua cabeï¿½a.", 2000);
             Narrate("Flechas cortando sombras. Uma mulher de cabelos prateados.", 2000);
-            Narrate("Gritos. Corpos. E o silêncio de novo. \n", 3000);
+            Narrate("Gritos. Corpos. E o silï¿½ncio de novo. \n", 3000);
 
             var alara = new Player("Alara", 100, 20, 3);
 
             // Atribuindo habilidade
             alara.Skills.Add(new FlechaPerfurante());
 
-            var unlockPanel = new Panel("[white bold]Você desbloqueou a lembrança de Alara[/] [cyan]\n Ela luta. Ela lembra. Ela existe em você.\"[/]")
+            var unlockPanel = new Panel("[white bold]Vocï¿½ desbloqueou a lembranï¿½a de Alara[/] [cyan]\n Ela luta. Ela lembra. Ela existe em vocï¿½.\"[/]")
                 .Border(BoxBorder.Double)
                 .BorderColor(Color.Cyan1);
             AnsiConsole.Write(unlockPanel);
