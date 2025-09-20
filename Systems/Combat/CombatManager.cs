@@ -12,9 +12,8 @@ namespace Void.Systems.Combat
         private readonly Player _player;
         private readonly Enemy _enemy;
         private readonly char[] _terrain;
-        private bool _isPlayerTurn = true; // Controla de quem é o turno
+        private bool _isPlayerTurn = true;
 
-        // --- CONSTRUTOR ---
         public CombatManager(Player player, Enemy enemy)
         {
             _player = player;
@@ -22,24 +21,27 @@ namespace Void.Systems.Combat
             _terrain = new char[10];
         }
 
-        // --- MÉTODOS PRINCIPAIS ---
         public void StartBattle()
         {
-            // Loop continuará enquanto estiverem vivos
             while (_player.IsAlive && _enemy.IsAlive)
             {
                 // Desenha o campo de batalha e HUD
                 DrawBattlefield();
                 DisplayHUD();
 
-                // Verifica de quem é o turno
                 if (_isPlayerTurn)
                 {
-                    // Implementação do mecanismo de ação do jogador
+                    var rule = new Rule($"[yellow bold]Turno de {_player.Name}[/]");
+                    rule.Justification = Justify.Left;
+                    AnsiConsole.Write(rule);
+                    // Mecanismo de ação do jogador
                     HandlePlayerAction();
                 }
                 else
                 {
+                    var rule = new Rule($"[red bold]Turno de {_enemy.Name}[/]");
+                    rule.Justification = Justify.Left;
+                    AnsiConsole.Write(rule);
                     _enemy.PerformAction(_player);
                 }
 
@@ -59,100 +61,57 @@ namespace Void.Systems.Combat
 
         private void HandlePlayerAction()
         {
-            Console.WriteLine("\nAções disponíveis:");
-            Console.WriteLine("1. Andar para a Esquera (A)");
-            Console.WriteLine("2. Andar para a Direita (D)");
-            Console.WriteLine("3. Ataque Básico");
-            Console.WriteLine("4. Usar Habilidade");
-            Console.WriteLine("\nEscolha sua ação:");
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("\n[yellow]Qual sua próxima ação?[/]")
+                    .PageSize(4)
+                    .AddChoices(new[] {
+                "Mover para Esquerda", "Mover para Direita", "Ataque Básico", "Usar Habilidade"
+                    }));
 
-            ConsoleKeyInfo keyInfo = Console.ReadKey();
-            Console.WriteLine();
-
-            switch (char.ToUpper(keyInfo.KeyChar))
+            switch (choice)
             {
-                case 'A':
-                case'1':
-                if(_player.Position > 0)
-                    {
-                        _player.Position--;
-                        Console.WriteLine($"{_player.Name} se move para a esquerda.");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{_player.Name} está no limite do campo e não pode mais recuar.");
-                    }
-                        break;
-                case 'D':
-                case'2':
-                if(_player.Position < _terrain.Length - 1)
-                    {
-                        _player.Position++;
-                        Console.WriteLine($"{_player.Name} se move para a direita.");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{_player.Name} está no limite do campo e não pode mais avançar.");
-                    }
-                        break;
-                case'3':
-                    int distanceToEnemy = Math.Abs(_player.Position - _enemy.Position);
-                    if (distanceToEnemy <= _player.AttackRange)
-                    {
-                        Console.WriteLine($"Você ataca ferozmente {_enemy.Name}!");
-                        _enemy.CurrentHealth -= _player.AttackDamage;
-                        Console.WriteLine($"O inimigo sofreu {_player.AttackDamage} de dano.");
-                    }
-                    else
-                    {
-                       Console.WriteLine("Inimigo fora de alcance! Você não pode atacá-lo.");
-                    }
-                        break;
-                case '4':
-                    HandleSkillUsage();
+                case "Mover para Esquerda":
+                    if (_player.Position > 0) { _player.Position--; AnsiConsole.MarkupLine("> Você se move para a [cyan]esquerda[/]."); }
+                    else { AnsiConsole.MarkupLine("[grey]> Você já está no limite do campo![/]"); }
                     break;
 
-                default:
-                Console.WriteLine("Ação inválida! Você hesitou e perdeu seu turno.");
-                break;
+                case "Mover para Direita":
+                    if (_player.Position < _terrain.Length - 1) { _player.Position++; AnsiConsole.MarkupLine("> Você avança para a [cyan]direita[/]."); }
+                    else { AnsiConsole.MarkupLine("[grey]> Você não pode mais avançar![/]"); }
+                    break;
+
+                case "Ataque Básico":
+                    int distanceToEnemy = Math.Abs(_player.Position - _enemy.Position);
+                    if (distanceToEnemy <= _player.AttackRange) { AnsiConsole.MarkupLine($"> Você ataca ferozmente a {_enemy.Name}!"); _enemy.CurrentHealth -= _player.AttackDamage; AnsiConsole.MarkupLine($"> O inimigo sofreu [red]{_player.AttackDamage}[/] de dano."); }
+                    else { AnsiConsole.MarkupLine("[grey]> O inimigo está fora de alcance![/]"); }
+                    break;
+
+                case "Usar Habilidade":
+                    HandleSkillUsage();
+                    break;
             }
-
         }
-
+        
         private void HandleSkillUsage()
         {
             if (!_player.Skills.Any())
             {
-                Console.WriteLine("> Você não conhece nenhuma habilidade!");
-                HandlePlayerAction();
+                AnsiConsole.MarkupLine("[grey]> Você não conhece nenhuma habilidade![/]");
                 return;
             }
 
             Console.WriteLine("\nEscolha uma habilidade para usar:");
 
-            // Mostra uma lista numerada de habilidades
-            for (int i = 0; i < _player.Skills.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {_player.Skills[i].Name} - {_player.Skills[i].Description}");
-            }
-            Console.Write("\nSua escolha: ");
+            var chosenSkill = AnsiConsole.Prompt(
+                new SelectionPrompt<Skill>()
+                    .Title("Qual [purple_1]habilidade[/] usar?")
+                    .PageSize(5)
+                    .MoreChoicesText("[grey](Navegue com as setas)[/]")
+                    .UseConverter(skill => $"[bold]{skill.Name}[/] [grey]({skill.Description})[/]")
+                    .AddChoices(_player.Skills));
 
-            ConsoleKeyInfo skillKeyInfo = Console.ReadKey();
-            Console.WriteLine();
-
-            // Tenta converter a tecla pressionada para um número
-            if (int.TryParse(skillKeyInfo.KeyChar.ToString(), out int skillIndex) && skillIndex > 0 && skillIndex <= _player.Skills.Count)
-            {
-                // Pega a habilidade escolhida da lista (lembrando que a lista começa em 0)
-                Skill chosenSkill = _player.Skills[skillIndex - 1];
-
-                // Executa a habilidade.
-                chosenSkill.Execute(_player, _enemy);
-            }
-            else
-            {
-                Console.WriteLine("> Escolha inválida. Você se atrapalhou e perdeu o turno.");
-            }
+            chosenSkill.Execute(_player, _enemy);
         }
 
         // --- MÉTODOS DE RENDERIZAÇÃO ---
@@ -164,7 +123,7 @@ namespace Void.Systems.Combat
 
             for (int i = 0; i < _terrain.Length; i++)
             {
-                _terrain[i] = '.'; // Limpa o terreno
+                _terrain[i] = '_';
             }
 
             _terrain[_player.Position] = 'P';
@@ -191,7 +150,7 @@ namespace Void.Systems.Combat
 
             // --- Barra de Vida do Jogador ---
             var playerHealthChart = new BreakdownChart()
-                .Width(18) // Define a largura da barra
+                .Width(18)
                 .AddItem("Vida", _player.CurrentHealth, Color.Green)
                 .AddItem("Dano", _player.MaxHealth - _player.CurrentHealth, Color.Grey15);
 
@@ -215,15 +174,12 @@ namespace Void.Systems.Combat
                 new Markup($"[cyan]{_enemy.Position}[/]")
             };
 
-            // Agora adicionamos a lista de itens à tabela. Isso é inequívoco para o compilador.
+            
             table.AddRow(playerRow);
             table.AddRow(enemyRow);
-            // --- FIM DA CORREÇÃO ---
 
             AnsiConsole.Write(table);
         }
-
-
 
         private void DisplayBattleResult()
         {

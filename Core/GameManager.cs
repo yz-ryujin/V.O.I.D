@@ -96,7 +96,13 @@ namespace Void.Core
 
         private void Narrate(string text, int delayAfter = 1500)
         {
-            Console.WriteLine(text);
+            foreach (char c in text)
+            {
+                Console.Write(c);
+                Thread.Sleep(65);
+            }
+            Console.WriteLine();
+
             Thread.Sleep(delayAfter);
         }
     }
