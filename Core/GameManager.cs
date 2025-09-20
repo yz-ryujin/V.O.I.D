@@ -1,4 +1,5 @@
 ﻿using Void.Entities.Characters;
+using Void.Core;
 using Void.Systems.Combat;
 using Void.Systems.Story;
 using System;
@@ -11,76 +12,86 @@ namespace Void.Core
     public class GameManager
     {
         private readonly List<Player> _unlockedCharacters;
+        private readonly StoryManager _storyManager;
 
         public GameManager()
         {
             _unlockedCharacters = new List<Player>();
+            _storyManager = new StoryManager();
         }
 
         public void StartCampaign()
-        {
+        {           
+
+            var arcaneEchoArt = AssetManager.Load("EcoArcano.txt");
+
             
+            var layout = new Layout("Root")
+                .SplitRows(
+                    new Layout("Top").Ratio(3), 
+                    new Layout("Bottom").Ratio(1)
+                );
 
-            var bannerLines = new[]
-            {
-                " ██▒   █▓      ▒█████        ██▓     ▓█████▄ ",
-                "▓██░   █▒     ▒██▒  ██▒     ▓██▒     ▒██▀ ██▌",
-                " ▓██  █▒░     ▒██░  ██▒     ▒██▒     ░██   █▌",
-                "  ▒██ █░░     ▒██   ██░     ░██░     ░▓█▄   ▌",
-                "   ▒▀█░   ██▓ ░ ████▓▒░ ██▓ ░██░ ██▓ ░▒████▓ ",
-                "   ░ ▐░   ▒▓▒ ░ ▒░▒░▒░  ▒▓▒ ░▓   ▒▓▒  ▒▒▓  ▒ ",
-                "   ░ ░░   ░▒    ░ ▒ ▒░  ░▒   ▒ ░ ░▒   ░ ▒  ▒ ",
-                "     ░░   ░   ░ ░ ░ ▒   ░    ▒ ░ ░    ░ ░  ░ ",
-                "      ░    ░      ░ ░    ░   ░    ░     ░    ",
-                "     ░     ░             ░        ░   ░      "
-            };
+            
+            string asciiArtString = string.Join("\n", arcaneEchoArt);
+            var asciiArtPanel = new Panel(new Text(asciiArtString).Centered())
+                .Expand()
+                .Border(BoxBorder.Double) 
+                .BorderColor(Color.White);
 
+            
+            layout["Top"].Update(asciiArtPanel);
 
-            // Obter largura do console
-            int consoleWidth = Console.WindowWidth;
+            
+            var descriptionText = "\n[grey]> O ar é pesado, carregado com o pó de eras esquecidas.\n> O silêncio é tão profundo que você quase ouve o estalar de sua própria alma.[/]\n" +
+                      "[grey]> Através da névoa de partículas, uma figura alta se define, imóvel como uma estátua.\n> Runas que você não reconhece pulsam com uma luz fraca em suas vestes, tecendo padrões de poder há muito perdido.                         [/]\n\n" +
+                      "[white bold]UM ECO ARCANO[/] está diante de você, um guardião silencioso do nada.";
+            var actionsText = "\n[gold1]» Attack[/]\n  Item\n  Look\n  Flee\n";
 
-            foreach (var line in bannerLines)
-            {
-                int leftPadding = (consoleWidth - line.Length) / 2;
-                string paddedLine = new string(' ', Math.Max(0, leftPadding)) + line;
-                AnsiConsole.WriteLine(paddedLine);
-            }           
+            var grid = new Grid();
 
+            
+            grid.AddColumn(); 
+            grid.AddColumn(new GridColumn().Width(10)); 
+            grid.AddRow(
+                new Markup(descriptionText), 
+                new Markup(actionsText)  
+            );
 
+            var bottomPanel = new Panel(grid)
+                .Expand()
+                .Header("[red1]Combate[/]")
+                .Border(BoxBorder.Double)
+                .BorderColor(Color.Grey50);
+
+            layout["Bottom"].Update(bottomPanel);
+
+            AnsiConsole.Write(layout);
 
             AnsiConsole.MarkupLine("\n \n[grey]Pressione qualquer tecla para despertar...[/] \n");
             Console.ReadKey();
+            Console.Clear();
 
+            
             // 1. Tocar a cutscene do prólogo
-            PrologueCutscene prologue = new PrologueCutscene();
-            Player activePlayer = prologue.Play();
+            StoryResult result = _storyManager.StartStory();
 
-            // 2. Adicionar o personagem retornado à lista de desbloqueados
-            _unlockedCharacters.Add(activePlayer);
+            Player activePlayer = result.CharacterUnlocked;
 
-            Console.WriteLine($"\n{activePlayer.Name} foi adicionada ao seu time.");
-            Thread.Sleep(2000);
+            if (activePlayer != null)
+            {
+                _unlockedCharacters.Add(activePlayer);
+            }
 
-            // 3. Preparar e iniciar o primeiro combate
-            Narrate("E então — som.", 1500);
-            Narrate("Um ruído áspero, rastejante.", 2000);
-            Narrate("Algo está vindo. \n", 3000);
+            if (result.EnemyToFight != null)
+            {
+                CombatManager combat = new CombatManager(activePlayer, result.EnemyToFight);
+                combat.StartBattle();
+            }
 
-            Console.ForegroundColor = ConsoleColor.Red;
-            Narrate("Sombra Rastejante detectada.", 2500);
-            Console.ResetColor();
-
-            Enemy firstEnemy = new Enemy("Sombra Rastejante", 40, 10, 1, 7);
-
-            // 4. Entregar o controle ao CombatManager
-            CombatManager combat = new CombatManager(activePlayer, firstEnemy);
-            combat.StartBattle();
-
-            // 5. Lidar com o resultado da batalha
             if (activePlayer.IsAlive)
             {
-                Console.WriteLine("\nVocê sobreviveu ao seu primeiro desafio no Vazio.");
-                Narrate("...A jornada apenas começou.", 3000);
+                Console.WriteLine("\nVocê sobreviveu ao encontro inicial com o Vazio.");
             }
             else
             {
@@ -88,18 +99,18 @@ namespace Void.Core
                 return;
             }
 
+
             Console.Clear();
 
 
-            Narrate("Seguindo um rastro de energia distorcida, você encontra outra ilha flutuante", 2000) ;
+            Narrate("Seguindo um rastro de energia distorcida, você encontra outra ilha flutuante", 2000);
             Narrate("Nela, um homem de armadura pesada luta sozinho contra três sombras.", 3000);
             Narrate("Com sua ajuda, a batalha termina rapidamente", 2000);
 
             AnsiConsole.MarkupLine("\n [yellow]\" Essa escória não para de surgir. Sou Tarok. Parece que temos um inimigo em comum.\"[/]");
             Thread.Sleep(3500);
 
-            // Desbloqueio de Tharok
-            var tharok = new Tharok(); // Criar uma instância de Tharok
+            var tharok = new Tharok();
             _unlockedCharacters.Add(tharok);
 
             var unlockPanel = new Panel($"\n [cyan]O poder e a resiliência de Tharok agora são seus.[/]")
@@ -143,13 +154,12 @@ namespace Void.Core
                 .MoreChoicesText("[grey](Mova para cima e para baixo para ver mais opções)[/]")
                 .UseConverter(player => $"[bold]{player.Name}[/] [grey](HP: {player.MaxHealth}, Dano: {player.AttackDamage}, Alcance: {player.AttackRange})[/]");
 
-            
+
             prompt.AddChoices(_unlockedCharacters);
-                       
+
             return AnsiConsole.Prompt(prompt);
         }
 
-        // Método auxiliar que movemos para cá para ser usado pelo GameManager
         private void Narrate(string text, int delayAfter = 1500)
         {
             Console.WriteLine(text);
