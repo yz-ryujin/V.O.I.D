@@ -31,11 +31,17 @@ namespace Void.Systems.Combat
 
                 if (_isPlayerTurn)
                 {
+                    var rule = new Rule($"[yellow bold]Turno de {_player.Name}[/]");
+                    rule.Justification = Justify.Left;
+                    AnsiConsole.Write(rule);
                     // Mecanismo de ação do jogador
                     HandlePlayerAction();
                 }
                 else
                 {
+                    var rule = new Rule($"[red bold]Turno de {_enemy.Name}[/]");
+                    rule.Justification = Justify.Left;
+                    AnsiConsole.Write(rule);
                     _enemy.PerformAction(_player);
                 }
 
@@ -174,8 +180,6 @@ namespace Void.Systems.Combat
 
             AnsiConsole.Write(table);
         }
-
-
 
         private void DisplayBattleResult()
         {
