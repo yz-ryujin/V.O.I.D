@@ -10,5 +10,10 @@
   <ItemGroup>
     <PackageReference Include="Spectre.Console" Version="0.51.1" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
 </Project>
