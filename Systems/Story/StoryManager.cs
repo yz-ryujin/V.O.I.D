@@ -4,12 +4,17 @@ namespace Void.Systems.Story
 {
     public class StoryManager
     {
-        public StoryResult StartStory()
+        public StoryResult PlayPrologue()
         {
             var prologue = new PrologueEvent();
-            StoryResult prologueResult = prologue.Play();
 
-            return prologueResult;
+            return prologue.Play();
+        }
+
+        public StoryResult PlayFirstRift()
+        {
+            var riftEvent = new FirstRiftEvent();
+            return riftEvent.Play();
         }
     }
 }
