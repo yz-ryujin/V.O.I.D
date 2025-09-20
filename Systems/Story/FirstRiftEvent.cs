@@ -62,7 +62,11 @@ namespace Void.Systems.Story
                 AnsiConsole.Write(unlockPanel);
                 Thread.Sleep(4000);
 
-                return new StoryResult { CharacterUnlocked = tharok };
+                return new StoryResult
+                {
+                    CharacterUnlocked = tharok,
+                    EnemyToFight = new Enemy("Arauto da Loucura", 60, 15, 2, 8)
+                };
             }
             else
             {
@@ -75,11 +79,15 @@ namespace Void.Systems.Story
                 var lyra = new Lyra();
                 var unlockPanel = new Panel($"[cyan]\"Não se vence a escuridão com mais escuridão. Vence-se sendo a luz que, por menor que seja, se recusa a apagar.\"[/]")
                     .Header($"[white bold]Você desbloqueou a lembrança de {lyra.Name}[/]")
-                    .Border(BoxBorder.Double).BorderColor(Color.Cyan);
+                    .Border(BoxBorder.Double).BorderColor(Color.Cyan1);
                 AnsiConsole.Write(unlockPanel);
                 Thread.Sleep(4000);
 
-                return new StoryResult { CharacterUnlocked = lyra };
+                return new StoryResult 
+                { 
+                    CharacterUnlocked = lyra,
+                    EnemyToFight = new Enemy("Arauto da Loucura", 60, 15, 2, 8)
+                };
             }
         }
 
