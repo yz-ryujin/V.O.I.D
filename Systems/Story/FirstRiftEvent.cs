@@ -93,7 +93,13 @@ namespace Void.Systems.Story
 
         private void Narrate(string text, int delayAfter = 1500)
         {
-            AnsiConsole.MarkupLine(text);
+            foreach (char c in text)
+            {
+                Console.Write(c);
+                Thread.Sleep(65);
+            }
+            Console.WriteLine();
+
             Thread.Sleep(delayAfter);
         }
     }
