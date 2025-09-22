@@ -7,7 +7,6 @@ namespace Void.Entities.Characters
     {
         public Eryn() : base("Eryn", 90, 10, 1)
         {
-            // Habilidades específicas de Eryn podem ser adicionadas aqui
         }
     }
 }

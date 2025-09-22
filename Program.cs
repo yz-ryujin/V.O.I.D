@@ -12,7 +12,6 @@ namespace Void
             GameManager gameManager = new GameManager();
             gameManager.StartCampaign();
 
-            // Espera o usuário pressionar uma tecla antes de sair
             Console.WriteLine("Pressione qualquer tecla para sair...");
             Console.ReadKey();
 

@@ -1,7 +1,7 @@
 
 using Void.Entities.Characters;
 using System;
-using System.Threading; // Para simular delays
+using System.Threading;
 using Spectre.Console;
 using Spectre.Console.Rendering;
 
@@ -25,7 +25,6 @@ namespace Void.Systems.Combat
         {
             while (_player.IsAlive && _enemy.IsAlive)
             {
-                // Desenha o campo de batalha e HUD
                 DrawBattlefield();
                 DisplayHUD();
 
@@ -34,7 +33,6 @@ namespace Void.Systems.Combat
                     var rule = new Rule($"[yellow bold]Turno de {_player.Name}[/]");
                     rule.Justification = Justify.Left;
                     AnsiConsole.Write(rule);
-                    // Mecanismo de ação do jogador
                     HandlePlayerAction();
                 }
                 else
@@ -45,7 +43,7 @@ namespace Void.Systems.Combat
                     _enemy.PerformAction(_player);
                 }
 
-                _isPlayerTurn = !_isPlayerTurn; // Alterna o turno
+                _isPlayerTurn = !_isPlayerTurn;
 
                 if(_enemy.IsAlive)
                 {
@@ -55,7 +53,6 @@ namespace Void.Systems.Combat
 
             }
 
-            // Exibe o resultado da batalha
             DisplayBattleResult();
         }
 
@@ -114,8 +111,6 @@ namespace Void.Systems.Combat
             chosenSkill.Execute(_player, _enemy);
         }
 
-        // --- MÉTODOS DE RENDERIZAÇÃO ---
-
         private void DrawBattlefield()
         {
             Console.Clear();
@@ -143,18 +138,15 @@ namespace Void.Systems.Combat
             table.Border(TableBorder.Rounded);
             table.Title("[yellow]STATUS DA BATALHA[/]");
 
-            // Adicionamos uma largura à coluna da vida para a barra caber confortavelmente
             table.AddColumn(new TableColumn("[b]Personagem[/]").Centered());
-            table.AddColumn(new TableColumn("[green]Vida[/]").Width(20).Centered()); // <-- LARGURA ADICIONADA
+            table.AddColumn(new TableColumn("[green]Vida[/]").Width(20).Centered());
             table.AddColumn(new TableColumn("[cyan]Posição[/]").Centered());
 
-            // --- Barra de Vida do Jogador ---
             var playerHealthChart = new BreakdownChart()
                 .Width(18)
                 .AddItem("Vida", _player.CurrentHealth, Color.Green)
                 .AddItem("Dano", _player.MaxHealth - _player.CurrentHealth, Color.Grey15);
 
-            // --- Barra de Vida do Inimigo ---
             var enemyHealthChart = new BreakdownChart()
                 .Width(18)
                 .AddItem("Vida", _enemy.CurrentHealth, Color.Red)

@@ -8,9 +8,7 @@ namespace Void.Systems.Story
 {
     public class PrologueEvent : IStoryEvent
     {
-        /// <summary>
-        /// Executa a cutscene do prólogo e retorna o personagem desbloqueado.
-        /// </summary>
+        
         public StoryResult Play()
         {
             Narrate("'Antes do som, houve o silêncio.", 2000);

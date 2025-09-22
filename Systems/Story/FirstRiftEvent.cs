@@ -49,7 +49,6 @@ namespace Void.Systems.Story
 
             if (choice == "Alcançar o Guerreiro (Tharok)")
             {
-                // Fragmento do Tharok
                 Console.Clear();
                 Narrate("Sua mão atravessa a barreira da Fenda e se fecha sobre o eco de Tharok.", 3000);
                 Narrate("Na visão, você vê Lyra olhar em sua direção. Não há medo em seus olhos, apenas aceitação.", 3500);
@@ -70,7 +69,6 @@ namespace Void.Systems.Story
             }
             else
             {
-                // Fragmento da Lyra
                 Console.Clear();
                 Narrate("Sua mão atravessa a Fenda e se agarra ao eco de Lyra.", 3000);
                 Narrate("Na visão, você vê o machado de Tharok finalmente vacilar. Ele encara a horda com um último sorriso desafiador.", 4000);
