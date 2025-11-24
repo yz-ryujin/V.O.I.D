@@ -60,28 +60,28 @@ namespace Void.Systems.Combat
         {
             var choice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title("\n[yellow]Qual sua próxima ação?[/]")
+                    .Title("\n[yellow]Qual sua prÃ³xima aÃ§Ã£o?[/]")
                     .PageSize(4)
                     .AddChoices(new[] {
-                "Mover para Esquerda", "Mover para Direita", "Ataque Básico", "Usar Habilidade"
+                "Mover para Esquerda", "Mover para Direita", "Ataque BÃ¡sico", "Usar Habilidade"
                     }));
 
             switch (choice)
             {
                 case "Mover para Esquerda":
-                    if (_player.Position > 0) { _player.Position--; AnsiConsole.MarkupLine("> Você se move para a [cyan]esquerda[/]."); }
-                    else { AnsiConsole.MarkupLine("[grey]> Você já está no limite do campo![/]"); }
+                    if (_player.Position > 0) { _player.Position--; AnsiConsole.MarkupLine("> Vocï¿½ se move para a [cyan]esquerda[/]."); }
+                    else { AnsiConsole.MarkupLine("[grey]> VocÃª jÃ¡ estÃ¡ no limite do campo![/]"); }
                     break;
 
                 case "Mover para Direita":
-                    if (_player.Position < _terrain.Length - 1) { _player.Position++; AnsiConsole.MarkupLine("> Você avança para a [cyan]direita[/]."); }
-                    else { AnsiConsole.MarkupLine("[grey]> Você não pode mais avançar![/]"); }
+                    if (_player.Position < _terrain.Length - 1) { _player.Position++; AnsiConsole.MarkupLine("> Vocï¿½ avanï¿½a para a [cyan]direita[/]."); }
+                    else { AnsiConsole.MarkupLine("[grey]> VocÃª nÃ£o pode mais avanÃ§ar![/]"); }
                     break;
 
-                case "Ataque Básico":
+                case "Ataque BÃ¡sico":
                     int distanceToEnemy = Math.Abs(_player.Position - _enemy.Position);
-                    if (distanceToEnemy <= _player.AttackRange) { AnsiConsole.MarkupLine($"> Você ataca ferozmente a {_enemy.Name}!"); _enemy.CurrentHealth -= _player.AttackDamage; AnsiConsole.MarkupLine($"> O inimigo sofreu [red]{_player.AttackDamage}[/] de dano."); }
-                    else { AnsiConsole.MarkupLine("[grey]> O inimigo está fora de alcance![/]"); }
+                    if (distanceToEnemy <= _player.AttackRange) { AnsiConsole.MarkupLine($"> Vocï¿½ ataca ferozmente a {_enemy.Name}!"); _enemy.CurrentHealth -= _player.AttackDamage; AnsiConsole.MarkupLine($"> O inimigo sofreu [red]{_player.AttackDamage}[/] de dano."); }
+                    else { AnsiConsole.MarkupLine("[grey]> O inimigo estï¿½ fora de alcance![/]"); }
                     break;
 
                 case "Usar Habilidade":
@@ -94,7 +94,7 @@ namespace Void.Systems.Combat
         {
             if (!_player.Skills.Any())
             {
-                AnsiConsole.MarkupLine("[grey]> Você não conhece nenhuma habilidade![/]");
+                AnsiConsole.MarkupLine("[grey]> Vocï¿½ nï¿½o conhece nenhuma habilidade![/]");
                 return;
             }
 
@@ -124,7 +124,7 @@ namespace Void.Systems.Combat
             _terrain[_player.Position] = 'P';
             _terrain[_enemy.Position] = 'E';
 
-            Console.Write("Posição: ");
+            Console.Write("Posiï¿½ï¿½o: ");
             for (int i = 0; i < _terrain.Length; i++)
             {
                 Console.Write($"[{_terrain[i]}]");
@@ -140,7 +140,7 @@ namespace Void.Systems.Combat
 
             table.AddColumn(new TableColumn("[b]Personagem[/]").Centered());
             table.AddColumn(new TableColumn("[green]Vida[/]").Width(20).Centered());
-            table.AddColumn(new TableColumn("[cyan]Posição[/]").Centered());
+            table.AddColumn(new TableColumn("[cyan]Posiï¿½ï¿½o[/]").Centered());
 
             var playerHealthChart = new BreakdownChart()
                 .Width(18)
@@ -178,13 +178,13 @@ namespace Void.Systems.Combat
             Console.Clear();
             if (_player.IsAlive)
             {
-                Console.WriteLine($"******************** \n VITÓRIA! \n ******************** ");
-                Console.WriteLine($"Você derrotou {_enemy.Name}. ");
+                Console.WriteLine($"******************** \n VITï¿½RIA! \n ******************** ");
+                Console.WriteLine($"Vocï¿½ derrotou {_enemy.Name}. ");
             }
             else
             {
                 Console.WriteLine($"******************** \n DERROTA! \n ******************** ");
-                Console.WriteLine($"Você foi consumido pelo Vazio. ");
+                Console.WriteLine($"Vocï¿½ foi consumido pelo Vazio. ");
             }
         }
     }

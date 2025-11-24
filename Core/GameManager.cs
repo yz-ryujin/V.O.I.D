@@ -28,7 +28,6 @@ namespace Void.Core
             Console.Clear();
 
 
-            // Início da história
             StoryResult prologueResult = _storyManager.PlayPrologue();
 
             if (prologueResult.CharacterUnlocked != null && prologueResult.EnemyToFight != null)
@@ -49,7 +48,6 @@ namespace Void.Core
                 Narrate("...A jornada apenas começou.", 3000);
             }
 
-            // Primeira Fenda
             Console.Clear();
             StoryResult riftResult = _storyManager.PlayFirstRift();
 
@@ -58,7 +56,6 @@ namespace Void.Core
                 _unlockedCharacters.Add(riftResult.CharacterUnlocked);
             }
 
-            // Segundo combate
             Console.Clear();
             Narrate("Com uma nova memória resgatada do esquecimento, você sente o Vazio reagir...", 3000);
             AnsiConsole.MarkupLine("\n[red]Outra criatura se materializa, atraída pelo poder que você agora detém.[/]");
@@ -77,7 +74,6 @@ namespace Void.Core
 
         }
 
-        // Escolher fragmento de personagem
         private Player ChooseCharacter()
         {
             AnsiConsole.WriteLine();
