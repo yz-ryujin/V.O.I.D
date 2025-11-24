@@ -7,7 +7,7 @@ using Spectre.Console.Rendering;
 using Void.Systems.Audio;
 
 namespace Void.Systems.Combat
-{
+{ 
     public class CombatManager
     {
         private readonly Player _player;
