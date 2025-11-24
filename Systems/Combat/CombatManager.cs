@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using Spectre.Console;
 using Spectre.Console.Rendering;
+using Void.Systems.Audio;
 
 namespace Void.Systems.Combat
 {
@@ -23,6 +24,8 @@ namespace Void.Systems.Combat
 
         public void StartBattle()
         {
+            AudioManager.PlayBackgroundMusic("battle_theme.wav");
+
             while (_player.IsAlive && _enemy.IsAlive)
             {
                 DrawBattlefield();

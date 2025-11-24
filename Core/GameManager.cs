@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Spectre.Console;
+using Void.Systems.Audio;
 
 namespace Void.Core
 {
@@ -26,6 +27,8 @@ namespace Void.Core
             AnsiConsole.MarkupLine("\n \n[grey]Pressione qualquer tecla para despertar...[/] \n");
             Console.ReadKey();
             Console.Clear();
+
+            AudioManager.PlayBackgroundMusic("void_theme.wav");
 
 
             StoryResult prologueResult = _storyManager.PlayPrologue();
