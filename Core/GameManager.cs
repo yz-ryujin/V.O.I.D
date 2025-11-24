@@ -22,11 +22,36 @@ namespace Void.Core
         }
 
         public void StartCampaign()
-        {           
-                      
+        {
+
+            var bannerLines = new[]
+            {
+                "                                                                            ",
+                "                                                                            ",
+                "                ██▒   █▓      ▒█████        ██▓     ▓█████▄                 ",
+                "               ▓██░   █▒     ▒██▒  ██▒     ▓██▒     ▒██▀ ██▌                ",
+                "                ▓██  █▒░     ▒██░  ██▒     ▒██▒     ░██   █▌                ",
+                "                 ▒██ █░░     ▒██   ██░     ░██░     ░▓█▄   ▌                ",
+                "                  ▒▀█░   ██▓ ░ ████▓▒░ ██▓ ░██░ ██▓ ░▒████▓                 ",
+                "                  ░ ▐░   ▒▓▒ ░ ▒░▒░▒░  ▒▓▒ ░▓   ▒▓▒  ▒▒▓  ▒                 ",
+                "                  ░ ░░   ░▒    ░ ▒ ▒░  ░▒   ▒ ░ ░▒   ░ ▒  ▒                 ",
+                "                    ░░   ░   ░ ░ ░ ▒   ░    ▒ ░ ░    ░ ░  ░                 ",
+                "                     ░    ░      ░ ░    ░   ░    ░     ░                    ",
+                "                    ░     ░             ░        ░   ░                      ",
+                "                                                                            "
+            };
+
+            var bannerText = string.Join("\n", bannerLines);
+
+            AnsiConsole.Write(
+                new Align(
+                    new Markup($"[magenta3]{bannerText}[/]"),
+                    HorizontalAlignment.Center
+                )
+            );
+
             AnsiConsole.MarkupLine("\n \n[grey]Pressione qualquer tecla para despertar...[/] \n");
             Console.ReadKey();
-            Console.Clear();
 
             AudioManager.PlayBackgroundMusic("void_theme.wav");
 
